@@ -16,8 +16,9 @@ class CheckoutController extends Controller
         // Ambil pilihan tiket berdasarkan event_id
         $ticketOptions = Ticket::where('event_id', $event_id)->get();
 
-        // Menampilkan halaman checkout dengan data event dan ticketOptions
-        return view('dashboard.checkout', compact('event', 'ticketOptions'));
+        $orderSummary = session('order_summary', []);
+
+        return view('dashboard.checkout', compact('event', 'ticketOptions', 'orderSummary'));
     }
 
     public function processCheckout(Request $request, $event_id)
@@ -34,13 +35,11 @@ class CheckoutController extends Controller
         $event = Event::findOrFail($event_id);
         $ticketOptions = Ticket::where('event_id', $event_id)->get();
 
-        // Build the order summary
+        // Build the order summary. hanya perumpaan karena belum bisa narik order summary dari buytickets.blade
         $orderSummary = [
             'event' => $event, // Store event data
             'ticket_type' => [], // Store ticket types selected
             'ticket_price' => 0, // Store total ticket price
-            'service_handling' => 50000, // example service fee
-            'admin_fee' => 2500, // example admin fee
             'total' => 0, // Store total price
         ];
 
@@ -53,7 +52,7 @@ class CheckoutController extends Controller
         }
 
         // Calculate total (including service and admin fee)
-        $orderSummary['total'] = $orderSummary['ticket_price'] + $orderSummary['service_handling'] + $orderSummary['admin_fee'];
+        $orderSummary['total'] = $orderSummary['ticket_price'] ;
 
         // Store the order summary in the session
         session(['order_summary' => $orderSummary]);
@@ -61,6 +60,7 @@ class CheckoutController extends Controller
         // Redirect to the payment page
         return redirect()->route('payment');
     }
+
     public function payment()
     {
         // Get the order summary from the session

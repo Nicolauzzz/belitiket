@@ -96,14 +96,17 @@
                 const quantity = parseInt(option.querySelector('.quantity-value').textContent);
                 if (quantity > 0) {
                     orderSummary.push({
-                        ticketType: option.querySelector('.ticket-type').textContent,
+                        ticketType: option.querySelector('.ticket-type').textContent.trim(),  // Correctly grabbing the ticket type
                         quantity: quantity,
-                        price: parseFloat(option.dataset.ticketPrice)
+                        price: parseFloat(option.dataset.ticketPrice)  // Price from data attribute
                     });
                 }
             });
 
+            // Store the order summary in the hidden input field
             document.getElementById('order-summary-input').value = JSON.stringify(orderSummary);
         });
+
+
     </script>
 @endsection
