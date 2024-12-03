@@ -77,5 +77,30 @@ class CheckoutController extends Controller
         return view('dashboard.payment', compact('event', 'orderSummary'));
     }
 
+    public function processPayment(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'payment_method' => 'required',
+            'event_id' => 'required|exists:events,id',
+        ]);
+
+        // Ambil data event dari database
+        $event = Event::findOrFail($request->event_id);
+
+        // Simpan data pembayaran ke tabel orders
+        $order = Orders::create([
+            'event_id' => $event->id,
+            'user_id' => auth()->id(), // ID pengguna yang login
+            'ticket_id' => 1, // Ganti sesuai pilihan tiket
+            'quantity' => 1, // Ganti sesuai jumlah tiket
+            'harga' => 100000, // Ganti dengan harga tiket
+            'waktu_pembelian' => now(),
+            'status' => 'Menunggu Dibayar',
+        ]);
+
+        // Redirect ke halaman riwayat pembelian
+        return redirect()->route('history.index')->with('success', 'Pembelian berhasil, menunggu pembayaran.');
+    }
 
 }

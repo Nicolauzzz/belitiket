@@ -84,8 +84,11 @@
             <!-- Submit Button -->
             <form action="{{ route('process-payment') }}" method="POST">
                 @csrf
+                <input type="hidden" name="event_id" value="{{ $event->id }}">
                 <button type="submit" class="pay-now-btn">Pay Now</button>
             </form>
+
+
         </div>
     </div>
 @endsection

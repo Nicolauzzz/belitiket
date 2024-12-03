@@ -42,5 +42,10 @@ Route::put('/account', [ProfileController::class, 'update'])->name('profile.upda
 //untuk halaman checkout dan payment (masih belum bisa narik total tiket dan harga, cek javascript)
 Route::get('/checkout/{event_id}', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/{event_id}/process', [CheckoutController::class, 'processCheckout'])->name('process-checkout');
+
 Route::get('/payment', [CheckoutController::class, 'payment'])->name('payment');
+
 Route::post('/process-payment', [CheckoutController::class, 'processPayment'])->name('process-payment');
+
+
+//Route::get('/history', [HistoryController::class, 'index'])->name('history.index');

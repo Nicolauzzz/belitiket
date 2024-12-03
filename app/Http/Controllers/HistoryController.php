@@ -11,8 +11,12 @@ class HistoryController extends Controller
 {
     public function index()
     {
-        //AMBIL DATA riwayat dengan relasi user dan tiker
-        $historyData = Orders::with('user','ticket')->get();
+        // Ambil data riwayat pembelian user yang login
+        $historyData = Orders::with('user', 'ticket')
+            ->where('user_id', auth()->id()) // Filter berdasarkan user login
+            ->get();
+
         return view('history.history', compact('historyData'));
     }
+
 }
